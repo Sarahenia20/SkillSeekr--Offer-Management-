@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class OfferType extends AbstractType
 {
@@ -34,7 +35,18 @@ class OfferType extends AbstractType
             ->add('motive')
             ->add('type')
             ->add('location')
-            ->add('status') ;
+            ->add('status', ChoiceType::class, [
+                'choices' => [
+                    'Draft' => 'Draft',
+                    'Published' => 'Published',
+                    'Archived' => 'Archived',
+                ],
+                'expanded' => true,
+                'multiple' => false,
+                'disabled' => true,
+                'data' => 'Draft', 
+            ]);
+    }
             // ->add('skills', EntityType::class, [
             //     'class' => Skill::class,
             //     'choice_label' => 'skill',
@@ -43,7 +55,7 @@ class OfferType extends AbstractType
             // ]);
 
 
-    }
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

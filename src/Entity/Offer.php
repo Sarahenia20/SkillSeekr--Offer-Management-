@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 use App\Repository\OfferRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,9 +35,10 @@ class Offer
     #[Assert\NotBlank(message: "Author cannot be blank")]
     private $author;
 
-  
+    
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotNull(message: "Created At cannot be null")]
+    #[Assert\LessThanOrEqual("today", message: "Created At cannot be in the past")]
     private ?\DateTimeInterface $CreatedAt = null;
 
     

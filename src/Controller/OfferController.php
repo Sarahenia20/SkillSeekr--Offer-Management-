@@ -62,7 +62,7 @@ class OfferController extends AbstractController
             throw $this->createNotFoundException('Offer not found.');
         }
     
-        $form = $this->createForm(OfferType::class, $id);
+        $form = $this->createForm(OfferType::class, $o);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
