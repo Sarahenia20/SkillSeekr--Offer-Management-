@@ -1,50 +1,54 @@
-<!DOCTYPE html>
+{% extends 'back/base.html.twig' %}
 
-<title>Offer index</title>
+{% block title %}
+	SKILL SEEKR OFFERS
+{% endblock %}
 
 {% block body %}
-	<h1>Offer index</h1>
+	<h1 class="text-center mb-4">Offer Index</h1>
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Title</th>
-				<th>Description</th>
-				<th>Author</th>
-				<th>Creation Date</th>
-				<th>Type</th>
-				<th>Motive</th>
-				<th>Location</th>
-				<th>Status</th>
-				<th>actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for offer in offers %}
+	<div class="table-responsive">
+		<table class="table table-bordered table-hover" style="background-color: rgba(173, 216, 230, 0.8); border-color: #5e94b1;">
+			<thead class="bg-light">
 				<tr>
-					<td>{{ offer.id }}</td>
-					<td>{{ offer.title }}</td>
-					<td>{{ offer.description }}</td>
-					<td>{{ offer.author }}</td>
-					<td>{{ offer.CreatedAt ? offer.CreatedAt|date('Y-m-d') : '' }}</td>
-					<td>{{ offer.type }}</td>
-					<td>{{ offer.motive }}</td>
-					<td>{{ offer.location }}</td>
-					<td>{{ offer.status }}</td>
-					<td>
-						<a href="{{ path('app_offer_edit', {'id': offer.id}) }}">edit</a>
-						<a href="{{ path('app_offer_delete', {'id': offer.id}) }}">delete</a>
-						{# <a>Publish</a> #}
-					</td>
+					<th scope="col" class="text-center">Id</th>
+					<th scope="col" class="text-center">Title</th>
+					<th scope="col" class="text-center">Description</th>
+					<th scope="col" class="text-center">Author</th>
+					<th scope="col" class="text-center">Creation Date</th>
+					<th scope="col" class="text-center">Type</th>
+					<th scope="col" class="text-center">Motive</th>
+					<th scope="col" class="text-center">Location</th>
+					<th scope="col" class="text-center">Status</th>
+					<th scope="col" class="text-center">Actions</th>
 				</tr>
-			{% else %}
-				<tr>
-					<td colspan="5">no records found</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{% for offer in offers %}
+					<tr>
+						<td class="text-center" style="border-color: #5e94b1;">{{ offer.id }}</td>
+						<td style="border-color: #5e94b1;">{{ offer.title }}</td>
+						<td style="border-color: #5e94b1;">{{ offer.description }}</td>
+						<td style="border-color: #5e94b1;">{{ offer.author }}</td>
+						<td style="border-color: #5e94b1;">{{ offer.CreatedAt ? offer.CreatedAt|date('Y-m-d') : '' }}</td>
+						<td style="border-color: #5e94b1;">{{ offer.type }}</td>
+						<td style="border-color: #5e94b1;">{{ offer.motive }}</td>
+						<td style="border-color: #5e94b1;">{{ offer.location }}</td>
+						<td style="border-color: #5e94b1;">{{ offer.status }}</td>
+						<td class="text-center" style="border-color: #5e94b1;">
+							<a href="{{ path('app_offer_edit', {'id': offer.id}) }}" class="btn btn-sm btn-primary">Edit</a>
+							<a href="{{ path('app_offer_delete', {'id': offer.id}) }}" class="btn btn-sm btn-danger">Delete</a>
+							<a href="#" class="btn btn-sm btn-success">Publish</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="10" class="text-center">No records found</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 
-	<a href="{{ path('app_offer_new') }}">Create new Offer</a>
+	<a href="{{ path('app_offer_new') }}" class="btn btn-lg btn-primary d-block mx-auto mt-4">Create New Offer</a>
 {% endblock %}

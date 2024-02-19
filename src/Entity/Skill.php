@@ -52,13 +52,13 @@ class Skill
         return $this;
     }
 
-    public function removeOffer(Offer $offer): self
-{
-    $this->offers->removeElement($offer);
-    $offer->removeSkill($this); // Remove association from the other side
+//     public function removeOffer(Offer $offer): self
+// {
+//     $this->offers->removeElement($offer);
+//     $offer->removeSkill($this); // Remove association from the other side
 
-    return $this;
-}
+//     return $this;
+// }
 
     public function __toString(){
         return $this->getSkill();

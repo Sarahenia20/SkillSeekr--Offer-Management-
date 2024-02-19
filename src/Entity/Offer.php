@@ -21,42 +21,45 @@ class Offer
     #[ORM\Column]
     private ?int $id = null;
     
+
+    #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Title cannot be blank")]
     #[Assert\Length(max: 255, maxMessage: "Title cannot be longer than 200 characters")]
-    #[ORM\Column(length: 255)]
     private $title;
     
-    #[Assert\NotBlank(message: "Description cannot be blank")]
+
     #[ORM\Column(type: "text")]
+    #[Assert\NotBlank(message: "Description cannot be blank")]
     private $description;
- 
-    #[Assert\NotBlank(message: "Author cannot be blank")]
-    #[Assert\Email(message: "Author must be have a valid email address")]
+  
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Author cannot be blank")]
     private $author;
 
-    #[Assert\NotNull(message: "Created At cannot be null")]
+  
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotNull(message: "Created At cannot be null")]
     private ?\DateTimeInterface $CreatedAt = null;
 
-    #[Assert\NotNull(message: "Motive cannot be blank")]
+    
     #[ORM\ManyToOne(targetEntity: Motive::class)]
     #[ORM\JoinColumn(name: 'motive', referencedColumnName: 'motive')]
+    #[Assert\NotNull(message: "Motive cannot be blank")]
     private ?Motive $motive;
 
-    #[Assert\NotNull(message: "type cannot be blank")]
     #[ORM\ManyToOne(targetEntity: Type::class)]
     #[ORM\JoinColumn(name: 'type', referencedColumnName: 'type')]
+    #[Assert\NotNull(message: "type cannot be blank")]
     private ?Type $type;
 
-    #[Assert\NotNull(message: "Location cannot be blank")]
     #[ORM\ManyToOne(targetEntity: Location::class)]
     #[ORM\JoinColumn(name: 'location', referencedColumnName: 'location')]
+    #[Assert\NotNull(message: "Location cannot be blank")]
     private ?Location $location;
 
-    #[Assert\NotNull(message: "Status cannot be blank")]
     #[ORM\ManyToOne(targetEntity: Status::class)]
     #[ORM\JoinColumn(name: 'status', referencedColumnName: 'status')]
+    #[Assert\NotNull(message: "Status cannot be blank")]
     private ?Status $status;
 
     // #[ORM\ManyToMany(targetEntity: Skill::class)]
@@ -170,6 +173,8 @@ class Offer
     {
         if (is_string($CreatedAt)) {
             $CreatedAt = new \DateTime($CreatedAt);
+        } elseif (!$CreatedAt instanceof \DateTimeInterface) {
+            $CreatedAt = null;
         }
         $this->CreatedAt = $CreatedAt;
         return $this;
