@@ -30,15 +30,16 @@ class Offer
     #[ORM\Column(type: "text")]
     #[Assert\NotBlank(message: "Description cannot be blank")]
     private $description;
-  
+
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Author cannot be blank")]
+    #[Assert\Email(message: "Author must be with valid E-m  il format")]
     private $author;
 
     
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotNull(message: "Created At cannot be null")]
-    #[Assert\LessThanOrEqual("today", message: "Created At cannot be in the past")]
+    #[Assert\GreaterThan("today", message: "Created At cannot be in the Past")]
     private ?\DateTimeInterface $CreatedAt = null;
 
     
@@ -60,13 +61,17 @@ class Offer
     #[ORM\ManyToOne(targetEntity: Status::class)]
     #[ORM\JoinColumn(name: 'status', referencedColumnName: 'status')]
     #[Assert\NotNull(message: "Status cannot be blank")]
-    private ?Status $status;
-
-    // #[ORM\ManyToMany(targetEntity: Skill::class)]
-    // #[ORM\JoinTable(name: "offer_skills")]
-    // #[ORM\JoinColumn(name: "offer_id", referencedColumnName: "id")]
-    // #[ORM\InverseJoinColumn(name: "skills", referencedColumnName: "skill")]
-    // private Collection $skills;
+    private ?Status $status = null;
+    
+    #[ORM\ManyToMany(targetEntity: Skill::class)]
+    #[ORM\JoinTable(name: "offer_skills")]
+    #[ORM\JoinColumn(name: "id", referencedColumnName: "id")]
+    #[ORM\InverseJoinColumn(name: "skill", referencedColumnName: "skill")]
+    #[Assert\Count(
+        min: 1,
+        minMessage: "Please select at least one skill"
+    )]
+    private Collection $skills;
 
     
 
@@ -180,36 +185,41 @@ class Offer
         return $this;
     }
 
-    // public function __construct()
-    // {
-    //     $this->skills = new ArrayCollection();
-    // }
-    //  /**
-    //  * Returns a collection of Skill entities.
-    //  *
-    //  * @return Collection|Skill[]
-    //  */
 
-    //   public function getSkills(): Collection
-    //   {
-    //       return $this->skills;
-    //   }
-  
-    //   public function addSkill(Skill $skill): self
-    //   {
-    //       if (!$this->skills->contains($skill)) {
-    //           $this->skills[] = $skill;
-    //       }
-  
-    //       return $this;
-    //   }
-  
-    //   public function removeSkill(Skill $skill): self
-    //   {
-    //       $this->skills->removeElement($skill);
-    //       $skill->removeOffer($this); // Remove association from the other side
-      
-    //       return $this;
-    //   }
-  }
+    public function __construct()
+    {
+        $this->skills = new ArrayCollection();
+    }
+
+    // Getter and setter methods for $skills...
+
+    public function getSkills(): Collection
+    {
+        return $this->skills;
+    }
+
+    public function setSkills(Collection $skills): self
+    {
+        $this->skills = $skills;
+
+        return $this;
+    }
+
+    public function addSkill(Skill $skill): self
+    {
+        if (!$this->skills->contains($skill)) {
+            $this->skills[] = $skill;
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): self
+    {
+        $this->skills->removeElement($skill);
+
+        return $this;
+    }
+}
+
       

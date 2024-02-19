@@ -32,7 +32,7 @@ class OfferController extends AbstractController
         $offer = new Offer();
         $form = $this->createForm(OfferType::class, $offer);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()){         
+        if ($form->isSubmitted() && $form->isValid()){    
             $em = $mr->getManager(); 
             $em->persist($offer);
             $em->flush();

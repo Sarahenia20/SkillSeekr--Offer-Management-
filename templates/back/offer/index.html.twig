@@ -19,6 +19,7 @@
 					<th scope="col" class="text-center" style="border-color: #4682b4;">Type</th>
 					<th scope="col" class="text-center" style="border-color: #4682b4;">Motive</th>
 					<th scope="col" class="text-center" style="border-color: #4682b4;">Location</th>
+					<th scope="col" class="text-center" style="border-color: #4682b4;">Skills</th>
 					<th scope="col" class="text-center" style="border-color: #4682b4;">Status</th>
 					<th scope="col" class="text-center" style="border-color: #4682b4;">Actions</th>
 				</tr>
@@ -34,16 +35,24 @@
 						<td style="border-color: #4682b4;">{{ offer.type }}</td>
 						<td style="border-color: #4682b4;">{{ offer.motive }}</td>
 						<td style="border-color: #4682b4;">{{ offer.location }}</td>
+						<td class="text-center" style="border-color: #4682b4;">
+							{% for skill in offer.skills %}
+								{{ skill }}
+								{% if not loop.last %},
+								{% endif %}
+							{% endfor %}
+						</td>
+
 						<td style="border-color: #4682b4;">{{ offer.status }}</td>
 						<td class="text-center" style="border-color: #4682b4;">
 							<a href="{{ path('app_offer_edit', {'id': offer.id}) }}" class="btn btn-sm btn-primary">Edit</a>
 							<a href="{{ path('app_offer_delete', {'id': offer.id}) }}" class="btn btn-sm btn-danger">Delete</a>
 							<a href="#" class="btn btn-sm btn-success">Publish</a>
 							<a href="#" class="btn btn-sm btn-pink" style="
-								                                background-color: pink;
-								                                color: white;
-								                                border-color: pink;
-								                            ">Archive</a>
+																                                background-color: pink;
+																                                color: white;
+																                                border-color: pink;
+																                            ">Archive</a>
 						</td>
 					</tr>
 				{% else %}
