@@ -69,3 +69,4 @@ class Status
         return $this->getStatus();
     }
 }
+

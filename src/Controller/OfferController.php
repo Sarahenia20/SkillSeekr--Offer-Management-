@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Controller;
+use App\Form\OfferType;
 use App\Entity\Status;
 use App\Entity\User;
 use App\Entity\Offer;
-use App\Form\OfferType;
 use App\Repository\OfferRepository;
 use Doctrine\Persistence\ManagerRegistry; 
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,99 +21,76 @@ class OfferController extends AbstractController
     {
         return $this->render('back/offer/index.html.twig', [
             'offers' => $offerRepository->findAll(),
+            'page_title' => 'Offer Space',
+            'active_page' => 'Add Your Offer',
         ]);
     }
 
-    #[Route('/newOffer', name: 'app_offer_new', methods: ['GET', 'POST'])]
-    public function new(ManagerRegistry $mr,Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/newOffer', name: 'app_offer_new')]
+    public function new(ManagerRegistry $mr,Request $request,): Response
     {
-
         $offer = new Offer();
         $form = $this->createForm(OfferType::class, $offer);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // If "Publish" button is clicked
-        if ($request->request->has('publish')) {
-            // Get the EntityManager
-            $entityManager = $mr->getManager();
-            
-            // Fetch the status object for "Published" from the database
-            $publishedStatus = $entityManager->getRepository(Status::class)->findOneBy(['status' => 'Published']);
-
-            // Update offer status to "Published"
-            $offer->setStatus($publishedStatus);
-            $this->addFlash('success', 'Offer has been published!');
-        }
-        
-            $entityManager->persist($offer);
-            $entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()){         
+            $em = $mr->getManager(); 
+            $em->persist($offer);
+            $em->flush();
             $this->addFlash('success', 'Offer created successfully!');
-            return $this->redirectToRoute('app_offer_index', [], Response::HTTP_SEE_OTHER);
+            return $this ->redirectToRoute('app_offer_index');    
         }
-
         return $this->renderForm('back/offer/new.html.twig', [
             'offer' => $offer,
             'form' => $form,
             'page_title' => 'Offer Space',
             'active_page' => 'Add Your Offer',
         ]);
-    }
+        }
 
-    #[Route('/showOffer{id}', name: 'app_offer_show', methods: ['GET'])]
-    public function show(Offer $offer): Response
-    {
-        return $this->render('offer/show.html.twig', [
-            'offer' => $offer,
-        ]);
-    }
+    // #[Route('/showOffer{id}', name: 'app_offer_show')]
+    // public function show(Offer $offer): Response
+    // {
+    //     return $this->render('offer/show.html.twig', [
+    //         'offer' => $offer,
+    //     ]);
+    // }
 
-    #[Route('/editOffer{id}', name: 'app_offer_edit', methods: ['GET', 'POST'])]
-    public function edit(ManagerRegistry $mr,Request $request, Offer $offer, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(OfferType::class, $offer);
+    #[Route('/editOffer{id}', name: 'app_offer_edit')]
+    public function edit( $id, ManagerRegistry $mr, Request $request, OfferRepository $repo): Response
+    { $o = $repo->find($id);
+        if (!$o) {
+            throw $this->createNotFoundException('Offer not found.');
+        }
+    
+        $form = $this->createForm(OfferType::class, $id);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->isSubmitted() && $form->isValid()) {
-                // If "Publish" button is clicked
-            if ($request->request->has('publish')) {
-                // Get the EntityManager
-                $entityManager = $mr->getManager();
-    
-                // Fetch the status object for "Published" from the database
-                $publishedStatus = $entityManager->getRepository(Status::class)->findOneBy(['status' => 'Published']);
-    
-                // Update offer status to "Published"
-                $offer->setStatus($publishedStatus);
-            }
-            $entityManager->flush();
-            $this->addFlash('success', 'Offer has been updated successfully!');
 
-            return $this->redirectToRoute('app_offer_index', [], Response::HTTP_SEE_OTHER);
+
+            $em = $mr->getManager();
+            $em->persist($o);
+            $em->flush();
+            $this->addFlash('success', 'Offer has been updated successfully!');
+            return $this->redirectToRoute('app_offer_index');
         }
 
         return $this->renderForm('back/offer/edit.html.twig', [
-            'offer' => $offer,
+            'offer' => $o,
             'form' => $form,
+            'page_title' => 'Offer Space',
+            'active_page' => 'Add Your Offer',
         ]);
-        }
+        
     }
-    #[Route('/deleteOffer{id}', name: 'app_offer_delete', methods: ['POST'])]
-    public function delete(Request $request, Offer $offer, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$offer->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($offer);
-            $entityManager->flush();
-
-            // Flash message for successful deletion
-            $this->addFlash('success', 'Offer deleted successfully!');
-        } else {
-            // Flash message for CSRF token invalidation (optional)
-            $this->addFlash('error', 'Invalid CSRF token. Offer could not be deleted.');
+    #[Route('/deleteOffer{id}', name: 'app_offer_delete')]
+    public function removeP($id,ManagerRegistry $mr,OfferRepository $repo) : Response {
+        $offer=$repo->find($id);
+        $em=$mr->getManager();
+        $em->remove($offer);
+        $em->flush();
+        return $this->redirectToRoute('app_offer_index');
         }
-
-        return $this->redirectToRoute('app_offer_index', [], Response::HTTP_SEE_OTHER);
-    }
 
  
 }

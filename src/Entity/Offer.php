@@ -59,11 +59,11 @@ class Offer
     #[ORM\JoinColumn(name: 'status', referencedColumnName: 'status')]
     private ?Status $status;
 
-    #[ORM\ManyToMany(targetEntity: Skill::class)]
-    #[ORM\JoinTable(name: "offer_skills")]
-    #[ORM\JoinColumn(name: "offer_id", referencedColumnName: "id")]
-    #[ORM\InverseJoinColumn(name: "skills", referencedColumnName: "skill")]
-    private Collection $skills;
+    // #[ORM\ManyToMany(targetEntity: Skill::class)]
+    // #[ORM\JoinTable(name: "offer_skills")]
+    // #[ORM\JoinColumn(name: "offer_id", referencedColumnName: "id")]
+    // #[ORM\InverseJoinColumn(name: "skills", referencedColumnName: "skill")]
+    // private Collection $skills;
 
     
 
@@ -166,48 +166,45 @@ class Offer
         return $this->CreatedAt;
     }
 
-    public function setCreatedAt(): static
+    public function setCreatedAt($CreatedAt): static
     {
-        // Set the CreatedAt property to the current date and time
-        $this->CreatedAt = new \DateTime();
+        if (is_string($CreatedAt)) {
+            $CreatedAt = new \DateTime($CreatedAt);
+        }
+        $this->CreatedAt = $CreatedAt;
         return $this;
     }
 
-    public function __construct()
-    {
-        $this->skills = new ArrayCollection();
-    }
-     /**
-     * Returns a collection of Skill entities.
-     *
-     * @return Collection|Skill[]
-     */
+    // public function __construct()
+    // {
+    //     $this->skills = new ArrayCollection();
+    // }
+    //  /**
+    //  * Returns a collection of Skill entities.
+    //  *
+    //  * @return Collection|Skill[]
+    //  */
 
-      public function getSkills(): Collection
-      {
-          return $this->skills;
-      }
+    //   public function getSkills(): Collection
+    //   {
+    //       return $this->skills;
+    //   }
   
-      public function addSkill(Skill $skill): self
-      {
-          if (!$this->skills->contains($skill)) {
-              $this->skills[] = $skill;
-          }
+    //   public function addSkill(Skill $skill): self
+    //   {
+    //       if (!$this->skills->contains($skill)) {
+    //           $this->skills[] = $skill;
+    //       }
   
-          return $this;
-      }
+    //       return $this;
+    //   }
   
-      public function removeSkill(Skill $skill): self
-      {
-          $this->skills->removeElement($skill);
-          $skill->removeOffer($this); // Remove association from the other side
+    //   public function removeSkill(Skill $skill): self
+    //   {
+    //       $this->skills->removeElement($skill);
+    //       $skill->removeOffer($this); // Remove association from the other side
       
-          return $this;
-      }
-      #[ORM\PrePersist]
-      public function setCreatedAtValue(): void
-      {
-          $this->CreatedAt = new \DateTime();
-      }
+    //       return $this;
+    //   }
   }
       
