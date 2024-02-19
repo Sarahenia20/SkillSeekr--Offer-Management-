@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use App\Validator\Constraints as CustomAssert;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
@@ -19,35 +20,44 @@ class Offer
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    
+    #[Assert\NotBlank(message: "Title cannot be blank")]
+    #[Assert\Length(max: 255, maxMessage: "Title cannot be longer than 200 characters")]
     #[ORM\Column(length: 255)]
     private $title;
-
+    
+    #[Assert\NotBlank(message: "Description cannot be blank")]
     #[ORM\Column(type: "text")]
     private $description;
+ 
+    #[Assert\NotBlank(message: "Author cannot be blank")]
+    #[Assert\Email(message: "Author must be have a valid email address")]
+    #[ORM\Column(length: 255)]
+    private $author;
 
+    #[Assert\NotNull(message: "Created At cannot be null")]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $CreatedAt = null;
 
+    #[Assert\NotNull(message: "Motive cannot be blank")]
     #[ORM\ManyToOne(targetEntity: Motive::class)]
     #[ORM\JoinColumn(name: 'motive', referencedColumnName: 'motive')]
     private ?Motive $motive;
 
+    #[Assert\NotNull(message: "type cannot be blank")]
     #[ORM\ManyToOne(targetEntity: Type::class)]
     #[ORM\JoinColumn(name: 'type', referencedColumnName: 'type')]
     private ?Type $type;
 
+    #[Assert\NotNull(message: "Location cannot be blank")]
     #[ORM\ManyToOne(targetEntity: Location::class)]
     #[ORM\JoinColumn(name: 'location', referencedColumnName: 'location')]
     private ?Location $location;
 
+    #[Assert\NotNull(message: "Status cannot be blank")]
     #[ORM\ManyToOne(targetEntity: Status::class)]
     #[ORM\JoinColumn(name: 'status', referencedColumnName: 'status')]
     private ?Status $status;
-
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'Author', referencedColumnName: 'id')]
-    private ?User $author = null;
 
     #[ORM\ManyToMany(targetEntity: Skill::class)]
     #[ORM\JoinTable(name: "offer_skills")]
@@ -55,6 +65,7 @@ class Offer
     #[ORM\InverseJoinColumn(name: "skills", referencedColumnName: "skill")]
     private Collection $skills;
 
+    
 
 
    // Getters and setters
@@ -72,6 +83,18 @@ class Offer
    public function setTitle(string $title): self
    {
        $this->title = $title;
+
+       return $this;
+   }
+
+   public function getAuthor(): ?string
+   {
+       return $this->author;
+   }
+
+   public function setAuthor(string $author): self
+   {
+       $this->author = $author;
 
        return $this;
    }
@@ -150,28 +173,10 @@ class Offer
         return $this;
     }
 
-      // Getter and setter for author property
-      public function setAuthor(?User $author): self
-      {
-          $this->author = $author;
-  
-          return $this;
-      }
-  
-      public function getAuthor(): ?string
-      {
-          // If $author is set, return the email of the user
-          if ($this->author !== null) {
-              return $this->author->getEmail();
-          }
-          
-          return null;
-      }
-
-      public function __construct()
-      {
-          $this->skills = new ArrayCollection();
-      }
+    public function __construct()
+    {
+        $this->skills = new ArrayCollection();
+    }
      /**
      * Returns a collection of Skill entities.
      *
@@ -199,6 +204,10 @@ class Offer
       
           return $this;
       }
+      #[ORM\PrePersist]
+      public function setCreatedAtValue(): void
+      {
+          $this->CreatedAt = new \DateTime();
+      }
+  }
       
-    
-}

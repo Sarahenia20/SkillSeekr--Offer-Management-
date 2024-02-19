@@ -1,0 +1,14 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}
+    New Offer
+{% endblock %}
+
+{% block body %}
+    <h1 style="font-size: 2.5rem; font-weight: bold; text-align: center; color: white;">Create new SKILL Offer</h1>
+
+    {{ include('back/offer/_form.html.twig') }}
+    <a href="{{ path('app_offer_index') }}">back to list</a>
+    {# <script src="{{'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' }}"></script>
+    <script src="{{ asset('js/skills.js') }}"></script> #}
+{% endblock %}
