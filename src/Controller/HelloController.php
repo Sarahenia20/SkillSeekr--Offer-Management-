@@ -5,14 +5,15 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\OfferRepository;
 
 class HelloController extends AbstractController
 {
-    #[Route('/hello', name: 'app_hello')]
-    public function index(): Response
+    #[Route('/', name: 'front_offers')]
+    public function index(OfferRepository $offerRepository): Response
     {
-        return $this->render('front/pages/indexfront/index.html.twig', [
-            'controller_name' => 'HelloController',
+        return $this->render('front/offer/index.html.twig', [
+            'offers' => $offerRepository->findAll()
         ]);
     }
 }

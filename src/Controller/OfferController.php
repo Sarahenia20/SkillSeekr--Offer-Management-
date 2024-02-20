@@ -21,8 +21,8 @@ class OfferController extends AbstractController
     {
         return $this->render('back/offer/index.html.twig', [
             'offers' => $offerRepository->findAll(),
-            'page_title' => 'Offer Space',
-            'active_page' => 'Add Your Offer',
+            'page_title' => 'Offers',
+            'active_page' => 'Offers list',
         ]);
     }
 
@@ -33,6 +33,7 @@ class OfferController extends AbstractController
         $form = $this->createForm(OfferType::class, $offer);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){    
+           //dd($form);
             $em = $mr->getManager(); 
             $em->persist($offer);
             $em->flush();
@@ -42,8 +43,8 @@ class OfferController extends AbstractController
         return $this->renderForm('back/offer/new.html.twig', [
             'offer' => $offer,
             'form' => $form,
-            'page_title' => 'Offer Space',
-            'active_page' => 'Add Your Offer',
+            'page_title' => 'Offers',
+            'active_page' => 'New offer',
         ]);
         }
 
@@ -55,7 +56,7 @@ class OfferController extends AbstractController
     //     ]);
     // }
 
-    #[Route('/editOffer{id}', name: 'app_offer_edit')]
+    #[Route('/editOffer/{id}', name: 'app_offer_edit')]
     public function edit( $id, ManagerRegistry $mr, Request $request, OfferRepository $repo): Response
     { $o = $repo->find($id);
         if (!$o) {

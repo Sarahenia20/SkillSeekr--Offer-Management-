@@ -5,10 +5,17 @@
 {% endblock %}
 
 {% block body %}
-    <h1 style="font-size: 2.5rem; font-weight: bold; text-align: center; color: white;">Create new SKILL Offer</h1>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h1 class="display-3 font-weight-bold text-white text-center">New Offer</h1>
 
-    {{ include('back/offer/_form.html.twig') }}
-    <a href="{{ path('app_offer_index') }}">back to list</a>
-    {# <script src="{{'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' }}"></script>
-    <script src="{{ asset('js/skills.js') }}"></script> #}
+            {{ include('back/offer/_form.html.twig') }}
+            {# <script src="{{'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' }}"></script>
+            <script src="{{ asset('js/skills.js') }}"></script> #}
+        </div>
+    </div>
+    <div class="row pt-4">
+    <div class="col-md-12"><a href="{{ path('app_offer_index') }}" class="btn btn-success"><i class="fa fa-angle-left" aria-hidden="true">&nbsp;</i>
+back to list</a></div>
+    </div>
 {% endblock %}

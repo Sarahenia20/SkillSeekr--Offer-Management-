@@ -26,7 +26,10 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_offer_index') }}">back to list</a>
+    <div class="row pt-4">
+    <div class="col-md-12"><a href="{{ path('app_offer_index') }}" class="btn btn-success"><i class="fa fa-angle-left" aria-hidden="true">&nbsp;</i>
+back to list</a></div>
+    </div>
 
     <a href="{{ path('app_offer_edit', {'id': offer.id}) }}">edit</a>
 

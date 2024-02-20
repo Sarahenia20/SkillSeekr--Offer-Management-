@@ -5,37 +5,44 @@
 {% endblock %}
 
 {% block body %}
-	<h1 style="font-size: 2.5rem; font-weight: bold; text-align: center; color: white; margin-bottom: 60px;">SKILL SEEKR OFFERS</h1>
-
+<div class="row align-items-center  my-5">
+<div class="col-md-7">
+	<h1 class="display-3 font-weight-bold text-white">Offers list</h1>
+	</div>
+	<div class="col-md-5 text-end">
+	<a href="{{ path('app_offer_new') }}" class="btn btn-lg btn-info"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i>
+Offer</a>
+	</div>
+</div>
 	<div class="table-responsive">
-		<table class="table table-bordered table-hover" style="background-color: rgba(173, 216, 230, 0.8); border-color: #4682b4;">
-			<thead class="bg-light">
+		<table class="table table-hover">
+			<thead class="bg-dark text-white">
 				<tr>
-					<th scope="col" class="text-center" style="border-color: #4682b4;">Id</th>
-					<th scope="col" class="text-center" style="border-color: #4682b4;">Title</th>
-					<th scope="col" class="text-center" style="border-color: #4682b4;">Description</th>
-					<th scope="col" class="text-center" style="border-color: #4682b4;">Author</th>
-					<th scope="col" class="text-center" style="border-color: #4682b4;">Creation Date</th>
-					<th scope="col" class="text-center" style="border-color: #4682b4;">Type</th>
-					<th scope="col" class="text-center" style="border-color: #4682b4;">Motive</th>
-					<th scope="col" class="text-center" style="border-color: #4682b4;">Location</th>
-					<th scope="col" class="text-center" style="border-color: #4682b4;">Skills</th>
-					<th scope="col" class="text-center" style="border-color: #4682b4;">Status</th>
-					<th scope="col" class="text-center" style="border-color: #4682b4;">Actions</th>
+					<th scope="col" class="text-center">Id</th>
+					<th scope="col" class="text-center">Title</th>
+					<th scope="col" class="text-center">Desc.</th>
+					<th scope="col" class="text-center">Author</th>
+					<th scope="col" class="text-center">Date</th>
+					<th scope="col" class="text-center">Type</th>
+					<th scope="col" class="text-center">Motive</th>
+					<th scope="col" class="text-center">Location</th>
+					<th scope="col" class="text-center">Skills</th>
+					<th scope="col" class="text-center">Status</th>
+					<th scope="col" class="text-center">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for offer in offers %}
 					<tr>
-						<td class="text-center" style="border-color: #4682b4;">{{ offer.id }}</td>
-						<td style="border-color: #4682b4;">{{ offer.title }}</td>
-						<td style="border-color: #4682b4;">{{ offer.description }}</td>
-						<td style="border-color: #4682b4;">{{ offer.author }}</td>
-						<td style="border-color: #4682b4;">{{ offer.CreatedAt ? offer.CreatedAt|date('Y-m-d') : '' }}</td>
-						<td style="border-color: #4682b4;">{{ offer.type }}</td>
-						<td style="border-color: #4682b4;">{{ offer.motive }}</td>
-						<td style="border-color: #4682b4;">{{ offer.location }}</td>
-						<td class="text-center" style="border-color: #4682b4;">
+						<td class="text-center">{{ offer.id }}</td>
+						<td  class="text-center">{{ offer.title }}</td>
+						<td  class="text-center">{{ offer.description }}</td>
+						<td  class="text-center">{{ offer.author }}</td>
+						<td  class="text-center">{{ offer.CreatedAt ? offer.CreatedAt|date('Y-m-d') : '' }}</td>
+						<td  class="text-center">{{ offer.type }}</td>
+						<td  class="text-center">{{ offer.motive }}</td>
+						<td  class="text-center">{{ offer.location }}</td>
+						<td class="text-center">
 							{% for skill in offer.skills %}
 								{{ skill }}
 								{% if not loop.last %},
@@ -43,26 +50,24 @@
 							{% endfor %}
 						</td>
 
-						<td style="border-color: #4682b4;">{{ offer.status }}</td>
-						<td class="text-center" style="border-color: #4682b4;">
-							<a href="{{ path('app_offer_edit', {'id': offer.id}) }}" class="btn btn-sm btn-primary">Edit</a>
-							<a href="{{ path('app_offer_delete', {'id': offer.id}) }}" class="btn btn-sm btn-danger">Delete</a>
-							<a href="#" class="btn btn-sm btn-success">Publish</a>
-							<a href="#" class="btn btn-sm btn-pink" style="
-																                                background-color: pink;
-																                                color: white;
-																                                border-color: pink;
-																                            ">Archive</a>
+						<td>{{ offer.status }}</td>
+						<td class="text-center">
+							<a href="{{ path('app_offer_edit', {'id': offer.id}) }}" class="btn btn-xs btn-primary" title="Edit offer">
+								<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+							</a>
+							<a href="{{ path('app_offer_delete', {'id': offer.id}) }}" class="btn btn-xs btn-danger" title="Delete offer">
+								<i class="fa fa-trash" aria-hidden="true"></i>
+							</a>
 						</td>
 					</tr>
 				{% else %}
 					<tr>
-						<td colspan="10" class="text-center" style="border-color: #4682b4;">No records found</td>
+						<td colspan="10" class="text-center">No records found</td>
 					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 	</div>
 
-	<a href="{{ path('app_offer_new') }}" class="btn btn-lg btn-primary d-block mx-auto mt-4">Create New Offer</a>
+	
 {% endblock %}

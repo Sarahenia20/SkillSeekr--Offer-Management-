@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class OfferType extends AbstractType
 {
@@ -31,15 +32,17 @@ class OfferType extends AbstractType
         $builder
             ->add('title')
             ->add('description')
-            ->add('author')
+            ->add('author', EmailType::class, [
+                'attr' => array(
+                    'placeholder' => 'Enter author email'
+                )
+            ])
             ->add('CreatedAt', DateType::class,[
                 'widget'=>'single_text',
             ])
             ->add('motive')
             ->add('type')
             ->add('location')
-
-        
             ->add('status', EntityType::class, [
                 'class' => Status::class,
                 'expanded' => true,
@@ -56,6 +59,12 @@ class OfferType extends AbstractType
                     return [];
                 },
             ])
+            // ->add('status', CheckboxType::class, [
+            //     'label' => 'Published',
+            //     'label_attr' => [
+            //         'class' => 'checkbox-switch',
+            //     ],
+            // ])
     
     ->add('skills', EntityType::class, [
         'class' => 'App\Entity\Skill',
