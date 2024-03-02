@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Validator\Constraints as CustomAssert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: OfferRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
@@ -33,12 +34,12 @@ class Offer
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Author cannot be blank")]
-    #[Assert\Email(message: "Author must be with valid E-m  il format")]
+    #[Assert\Email(message: "Author must be with valid E-mail format")]
     private $author;
 
     
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\NotNull(message: "Created At cannot be null")]
+    #[Assert\NotNull(message: "Creation date needs to be set")]
     #[Assert\GreaterThan("today", message: "Created At cannot be in the Past")]
     private ?\DateTimeInterface $CreatedAt = null;
 
@@ -67,14 +68,17 @@ class Offer
     #[ORM\JoinTable(name: "offer_skills")]
     #[ORM\JoinColumn(name: "id", referencedColumnName: "id")]
     #[ORM\InverseJoinColumn(name: "skill", referencedColumnName: "skill")]
-    #[Assert\Count(
-        min: 1,
-        minMessage: "Please select at least one skill"
-    )]
     private Collection $skills;
 
-    
+    #[Assert\File(
+        maxSize: "5M",
+        mimeTypes: ["image/jpeg", "image/png", "application/pdf"],
+        mimeTypesMessage: "Please upload a valid image (JPEG or PNG) or PDF file"
+    )]
+    private ?UploadedFile $file = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?string $fileName = null;
 
    // Getters and setters
 
@@ -220,6 +224,26 @@ class Offer
 
         return $this;
     }
-}
+    public function getFile(): ?UploadedFile
+    {
+        return $this->file;
+    }
 
+    public function setFile(?UploadedFile $file): self
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    public function getFileName(): ?string
+    {
+        return $this->fileName;
+    }
+
+    public function setFileName(?string $fileName): self
+    {
+        $this->fileName = $fileName;
+        return $this;
+    }
+}
       
