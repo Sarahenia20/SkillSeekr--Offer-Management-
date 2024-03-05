@@ -19,8 +19,8 @@ class TestController extends AbstractController
         {
             // Create an email message
             $email = (new Email())
-                ->from('sarah.henia@esprit.tn')
-                ->to('sarah.henia@esprit.tn')
+                ->from('mailtrap@example.com')
+                ->to('newuser@example.com')
                 ->subject('Test Email')
                 ->text('This is a test email sent from Symfony Mailer Bundle.');
             // Send the email
